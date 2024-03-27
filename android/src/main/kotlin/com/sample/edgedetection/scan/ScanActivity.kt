@@ -111,9 +111,9 @@ class ScanActivity : BaseActivity(), IScanView.Proxy {
         }
     }
 
-    override fun getSurfaceView() = findViewById<SurfaceView>(R.id.surface)
+    override fun getSurfaceView(): SurfaceView = findViewById<SurfaceView>(R.id.surface)
 
-    override fun getPaperRect() = findViewById<PaperRectangle>(R.id.paper_rect)
+    override fun getPaperRect(): PaperRectangle = findViewById(R.id.paper_rect)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
