@@ -1,10 +1,12 @@
 package com.sample.edgedetection.crop
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.graphics.createBitmap
 import com.sample.edgedetection.EdgeDetectionHandler
 import com.sample.edgedetection.SourceManager
 import com.sample.edgedetection.processor.Corners
@@ -18,6 +20,7 @@ import org.opencv.android.Utils
 import org.opencv.core.Mat
 import java.io.File
 import java.io.FileOutputStream
+import androidx.core.graphics.scale
 
 class CropPresenter(
     private val iCropView: ICropView.Proxy,
@@ -34,14 +37,15 @@ class CropPresenter(
 
     fun onViewsReady(paperWidth: Int, paperHeight: Int) {
         iCropView.getPaperRect().onCorners2Crop(corners, picture?.size(), paperWidth, paperHeight)
-        val bitmap = Bitmap.createBitmap(
+        val bitmap = createBitmap(
             picture?.width() ?: 1080, picture?.height()
-                ?: 1920, Bitmap.Config.ARGB_8888
+                ?: 1920
         )
         Utils.matToBitmap(picture, bitmap, true)
         iCropView.getPaper().setImageBitmap(bitmap)
     }
 
+    @SuppressLint("CheckResult")
     fun crop() {
         if (picture == null) {
             Log.i(TAG, "picture null?")
@@ -62,7 +66,7 @@ class CropPresenter(
                 Log.i(TAG, "cropped picture: $pc")
                 croppedPicture = pc
                 croppedBitmap =
-                    Bitmap.createBitmap(pc.width(), pc.height(), Bitmap.Config.ARGB_8888)
+                    createBitmap(pc.width(), pc.height())
                 Utils.matToBitmap(pc, croppedBitmap)
                 iCropView.getCroppedPaper().setImageBitmap(croppedBitmap)
                 iCropView.getPaper().visibility = View.GONE
@@ -70,6 +74,7 @@ class CropPresenter(
             }
     }
 
+    @SuppressLint("CheckResult")
     fun enhance() {
         if (croppedBitmap == null) {
             Log.i(TAG, "picture null?")
@@ -80,9 +85,11 @@ class CropPresenter(
             enhancedPicture != null -> {
                 enhancedPicture
             }
+
             rotateBitmap != null -> {
                 rotateBitmap
             }
+
             else -> {
                 croppedBitmap
             }
@@ -184,12 +191,7 @@ class CropPresenter(
         matrix.postRotate(degree.toFloat())
 
         // Resize the bitmap
-        val scaledBitmap = Bitmap.createScaledBitmap(
-            this,
-            width,
-            height,
-            true
-        )
+        val scaledBitmap = this.scale(width, height)
 
         // Create and return the rotated bitmap
         return Bitmap.createBitmap(

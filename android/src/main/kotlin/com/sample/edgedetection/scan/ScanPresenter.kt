@@ -1,4 +1,5 @@
 package com.sample.edgedetection.scan
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -142,7 +143,7 @@ class ScanPresenter constructor(
     private fun getBackFacingCameraId(): String? {
         for (camID in cameraManager.cameraIdList) {
             val lensFacing =
-                getCameraCharacteristics(camID)?.get(CameraCharacteristics.LENS_FACING)!!
+                getCameraCharacteristics(camID).get(CameraCharacteristics.LENS_FACING)!!
             if (lensFacing == CameraCharacteristics.LENS_FACING_BACK) {
                 mCameraLensFacing = camID
                 break
@@ -273,13 +274,14 @@ class ScanPresenter constructor(
         }
     }
 
+    @SuppressLint("CheckResult")
     override fun onPictureTaken(p0: ByteArray?, p1: Camera?) {
         Log.i(TAG, "on picture taken")
         Observable.just(p0)
             .subscribeOn(proxySchedule)
             .subscribe {
                 val pictureSize = p1?.parameters?.pictureSize
-                Log.i(TAG, "picture size: " + pictureSize.toString())
+                Log.i(TAG, "picture size: $pictureSize")
                 val mat = Mat(
                     Size(
                         pictureSize?.width?.toDouble() ?: 1920.toDouble(),
@@ -296,6 +298,7 @@ class ScanPresenter constructor(
             }
     }
 
+    @SuppressLint("CheckResult")
     override fun onPreviewFrame(p0: ByteArray?, p1: Camera?) {
         if (busy) {
             return

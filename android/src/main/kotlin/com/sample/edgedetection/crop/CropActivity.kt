@@ -40,17 +40,17 @@ class CropActivity : BaseActivity(), ICropView.Proxy {
         val initialBundle = intent.getBundleExtra(EdgeDetectionHandler.INITIAL_BUNDLE) as Bundle
         mPresenter = CropPresenter(this, initialBundle)
         findViewById<ImageView>(R.id.crop).setOnClickListener {
-            Log.e(TAG, "Crop touched!")
+            Log.e(tag, "Crop touched!")
             mPresenter.crop()
-            changeMenuVisibility(true)
+            changeMenuVisibility()
         }
     }
 
     override fun getPaper(): ImageView = findViewById(R.id.paper)
 
-    override fun getPaperRect() = findViewById<PaperRectangle>(R.id.paper_rect)
+    override fun getPaperRect(): PaperRectangle = findViewById<PaperRectangle>(R.id.paper_rect)
 
-    override fun getCroppedPaper() = findViewById<ImageView>(R.id.picture_cropped)
+    override fun getCroppedPaper(): ImageView = findViewById<ImageView>(R.id.picture_cropped)
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.crop_activity_menu, menu)
@@ -76,8 +76,8 @@ class CropActivity : BaseActivity(), ICropView.Proxy {
     }
 
 
-    private fun changeMenuVisibility(showMenuItems: Boolean) {
-        this.showMenuItems = showMenuItems
+    private fun changeMenuVisibility() {
+        this.showMenuItems = true
         invalidateOptionsMenu()
     }
 
@@ -89,7 +89,7 @@ class CropActivity : BaseActivity(), ICropView.Proxy {
                 return true
             }
             R.id.action_label -> {
-                Log.e(TAG, "Saved touched!")
+                Log.e(tag, "Saved touched!")
                 item.isEnabled = false
                 mPresenter.save()
                 setResult(Activity.RESULT_OK)
@@ -98,17 +98,17 @@ class CropActivity : BaseActivity(), ICropView.Proxy {
                 return true
             }
             R.id.rotation_image -> {
-                Log.e(TAG, "Rotate touched!")
+                Log.e(tag, "Rotate touched!")
                 mPresenter.rotate()
                 return true
             }
             R.id.gray -> {
-                Log.e(TAG, "Black White touched!")
+                Log.e(tag, "Black White touched!")
                 mPresenter.enhance()
                 return true
             }
             R.id.reset -> {
-                Log.e(TAG, "Reset touched!")
+                Log.e(tag, "Reset touched!")
                 mPresenter.reset()
                 return true
             }

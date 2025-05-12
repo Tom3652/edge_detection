@@ -39,11 +39,11 @@ class ScanActivity : BaseActivity(), IScanView.Proxy {
 
     override fun prepare() {
         if (!OpenCVLoader.initDebug()) {
-            Log.i(TAG, "loading opencv error, exit")
+            Log.i(tag, "loading opencv error, exit")
             finish()
         }
         else {
-            Log.i("OpenCV", "OpenCV loaded Successfully!");
+            Log.i("OpenCV", "OpenCV loaded Successfully!")
         }
 
         findViewById<View>(R.id.shut).setOnClickListener {
@@ -119,8 +119,8 @@ class ScanActivity : BaseActivity(), IScanView.Proxy {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                setResult(Activity.RESULT_OK)
+            if (resultCode == RESULT_OK) {
+                setResult(RESULT_OK)
                 finish()
             } else {
                 if (intent.hasExtra(EdgeDetectionHandler.FROM_GALLERY) && intent.getBooleanExtra(EdgeDetectionHandler.FROM_GALLERY, false))
@@ -129,12 +129,12 @@ class ScanActivity : BaseActivity(), IScanView.Proxy {
         }
 
         if (requestCode == 1) {
-            if (resultCode == Activity.RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 val uri: Uri = data!!.data!!
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     onImageSelected(uri)
                 }
-            }else if(resultCode == Activity.RESULT_CANCELED){
+            }else if(resultCode == RESULT_CANCELED){
                 mPresenter.start()
             }
             else {

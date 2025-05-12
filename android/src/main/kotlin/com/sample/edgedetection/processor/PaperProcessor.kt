@@ -8,6 +8,7 @@ import org.opencv.imgproc.Imgproc
 import kotlin.math.max
 import kotlin.math.pow
 import kotlin.math.sqrt
+import androidx.core.graphics.createBitmap
 
 const val TAG: String = "PaperProcessor"
 
@@ -68,7 +69,7 @@ fun enhancePicture(src: Bitmap?): Bitmap {
         15,
         15.0
     )
-    val result = Bitmap.createBitmap(src?.width ?: 1080, src?.height ?: 1920, Bitmap.Config.RGB_565)
+    val result = createBitmap(src?.width ?: 1080, src?.height ?: 1920, Bitmap.Config.RGB_565)
     Utils.matToBitmap(srcMat, result, true)
     srcMat.release()
     return result
